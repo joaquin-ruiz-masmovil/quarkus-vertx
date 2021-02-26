@@ -1,0 +1,9 @@
+display:
+  mach: 3
+  unit:
+    name: "mph"
+    factor: 2.23694
+
+quarkus:
+  vertx:
+    prefer-native-transport: true
