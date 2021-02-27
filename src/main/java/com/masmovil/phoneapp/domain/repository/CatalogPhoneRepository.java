@@ -1,12 +1,12 @@
 package com.masmovil.phoneapp.domain.repository;
 
 import com.masmovil.phoneapp.domain.model.CatalogPhone;
-import io.smallrye.mutiny.Uni;
+import io.reactivex.Single;
 
 import java.util.List;
 
 public interface CatalogPhoneRepository {
 
-  Uni<List<CatalogPhone>> getPhoneCatalog();
+  Single<List<CatalogPhone>> getPhoneCatalog();
 
 }

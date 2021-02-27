@@ -1,10 +1,11 @@
 plugins {
-    id 'java'
-    id 'io.quarkus'
+    id "java"
+    id "io.quarkus"
 }
 
 ext {
     mockitoVersion = "3.8.0"
+    vertxVersion = "4.0.2"
 }
 
 repositories {
@@ -14,21 +15,25 @@ repositories {
 
 dependencies {
     implementation enforcedPlatform("io.quarkus:quarkus-universe-bom:${quarkusVersion}")
-    implementation 'io.quarkus:quarkus-vertx'
-    implementation 'io.quarkus:quarkus-config-yaml'
-    implementation 'io.quarkus:quarkus-arc'
-    implementation 'io.quarkus:quarkus-resteasy-jackson'
-    implementation 'io.quarkus:quarkus-resteasy-mutiny'
+    implementation "io.quarkus:quarkus-vertx"
+    implementation "io.quarkus:quarkus-vertx-web"
+    implementation "io.quarkus:quarkus-config-yaml"
+    implementation "io.quarkus:quarkus-arc"
 
-    implementation 'org.apache.commons:commons-lang3:3.11'
+    // RxJava2 Verx - Quarkus Integration
+    implementation "io.vertx:vertx-rx-java2:$vertxVersion"
+    implementation "io.smallrye.reactive:mutiny-rxjava:0.14.0"
 
-    testImplementation 'io.quarkus:quarkus-junit5'
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
-    testImplementation "org.mockito:mockito-junit-jupiter:$mockitoVersion"
+    implementation "org.apache.commons:commons-lang3:3.11"
+
+    testImplementation "io.quarkus:quarkus-junit5"
+    testImplementation "io.rest-assured:rest-assured:4.3.3"
+    testImplementation "io.quarkus:quarkus-junit5-mockito"
+
 }
 
-group 'com.masmovil'
-version '1.0.0-SNAPSHOT'
+group "com.masmovil"
+version "1.0.0-SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -36,10 +41,10 @@ java {
 }
 
 compileJava {
-    options.encoding = 'UTF-8'
-    options.compilerArgs << '-parameters'
+    options.encoding = "UTF-8"
+    options.compilerArgs << "-parameters"
 }
 
 compileTestJava {
-    options.encoding = 'UTF-8'
+    options.encoding = "UTF-8"
 }

@@ -2,6 +2,7 @@ package com.masmovil.phoneapp.domain.model;
 
 import com.google.common.collect.Lists;
 import com.masmovil.phoneapp.mother.CatalogPhoneMother;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@QuarkusTest
 public class CostumerOrderShould {
 
   @Test
@@ -27,27 +29,6 @@ public class CostumerOrderShould {
 
     // then
     assertEquals(totalPrice, 0);
-
-  }
-
-  @Test
-  public void throwExceptionWhenOrderedFails() {
-    // given
-    List<CatalogPhone> phoneCatalog = CatalogPhoneMother.generatePhoneCatalog();
-
-    // when
-    Exception exception = assertThrows(
-        IllegalArgumentException.class,
-        () -> CostumerOrder.create()
-            .withName("User")
-            .withSurname("Surname")
-            .withEmail("email@email.es")
-            .withPhonesNames(Lists.newArrayList())
-            .withPhoneCatalog(phoneCatalog)
-            .build());
-
-    // then
-    assertEquals("Ordered Phone's names should not be empty", exception.getMessage());
 
   }
 

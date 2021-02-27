@@ -2,7 +2,7 @@ package com.masmovil.phoneapp.infrastructure.repository;
 
 import com.masmovil.phoneapp.domain.model.CatalogPhone;
 import com.masmovil.phoneapp.domain.repository.CatalogPhoneRepository;
-import io.smallrye.mutiny.Uni;
+import io.reactivex.Single;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Arrays;
@@ -13,8 +13,8 @@ import java.util.UUID;
 public class RandomCatalogPhoneRepositoryImpl implements CatalogPhoneRepository {
 
   @Override
-  public Uni<List<CatalogPhone>> getPhoneCatalog() {
-    return Uni.createFrom().item(Arrays.asList(generateRandomPhone("Ericsson"),
+  public Single<List<CatalogPhone>> getPhoneCatalog() {
+    return Single.just(Arrays.asList(generateRandomPhone("Ericsson"),
         generateRandomPhone("Nokia"),
         generateRandomPhone("iPhone"),
         generateRandomPhone("Blackberry"),

@@ -5,7 +5,7 @@ import com.masmovil.phoneapp.domain.model.CatalogPhone;
 import com.masmovil.phoneapp.domain.repository.CatalogPhoneRepository;
 import com.masmovil.phoneapp.mother.CatalogPhoneMother;
 import io.quarkus.test.junit.QuarkusTest;
-import io.smallrye.mutiny.Uni;
+import io.reactivex.Single;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,6 @@ import static org.mockito.Mockito.when;
 @QuarkusTest
 public class GetPhoneCatalogServiceShould {
 
-
   private CatalogPhoneRepository catalogPhoneRepositoryMock = mock(CatalogPhoneRepository.class);
 
   private GetPhoneCatalogService getPhoneCatalogService;
@@ -34,15 +33,15 @@ public class GetPhoneCatalogServiceShould {
   @Test
   public void returnAllPhonesCatalog() {
     // given
-    Uni<List<CatalogPhone>> phoneCatalog = Uni.createFrom().item(CatalogPhoneMother.generatePhoneCatalog());
+    Single<List<CatalogPhone>> phoneCatalog = Single.just(CatalogPhoneMother.generatePhoneCatalog());
     when(catalogPhoneRepositoryMock.getPhoneCatalog())
         .thenReturn(phoneCatalog);
 
     // when
-    Uni<List<PhoneCatalogInfo>> result = getPhoneCatalogService.execute();
+    Single<List<PhoneCatalogInfo>> result = getPhoneCatalogService.execute();
 
     // then
-    result.subscribe().with(resultlist -> {
+    result.subscribe(resultlist -> {
       List<String> catalogPhoneNames = resultlist.stream()
           .map(p -> p.getName())
           .collect(Collectors.toList());
@@ -61,15 +60,14 @@ public class GetPhoneCatalogServiceShould {
   public void returnAnyPhonesCatalog() {
 
     // given
-    List<CatalogPhone> phoneCatalog = Lists.newArrayList();
     when(catalogPhoneRepositoryMock.getPhoneCatalog())
-        .thenReturn(Uni.createFrom().item(phoneCatalog));
+        .thenReturn(Single.just(Lists.newArrayList()));
 
     // when
-    Uni<List<PhoneCatalogInfo>> result = getPhoneCatalogService.execute();
+    Single<List<PhoneCatalogInfo>> result = getPhoneCatalogService.execute();
 
     // then
-    result.subscribe().with(resultlist -> {
+    result.subscribe(resultlist -> {
       assertEquals(resultlist.size(), 0);
     });
 

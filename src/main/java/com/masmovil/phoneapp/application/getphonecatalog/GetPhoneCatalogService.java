@@ -2,14 +2,15 @@ package com.masmovil.phoneapp.application.getphonecatalog;
 
 import com.masmovil.phoneapp.domain.model.CatalogPhone;
 import com.masmovil.phoneapp.domain.repository.CatalogPhoneRepository;
-import io.smallrye.mutiny.Uni;
+import io.reactivex.Single;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
-
+import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ApplicationScoped
 public class GetPhoneCatalogService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GetPhoneCatalogService.class);
@@ -20,7 +21,7 @@ public class GetPhoneCatalogService {
     this.catalogPhoneRepository = catalogPhoneRepository;
   }
 
-  public Uni<List<PhoneCatalogInfo>> execute() {
+  public Single<List<PhoneCatalogInfo>> execute() {
 
     LOGGER.info("Executing -> 'Get Phone Catalog Service'");
 
