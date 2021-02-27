@@ -24,6 +24,13 @@ dependencies {
     implementation "io.vertx:vertx-rx-java2:$vertxVersion"
     implementation "io.smallrye.reactive:mutiny-rxjava:0.14.0"
 
+    // Postgres Reactive Client
+    implementation "io.quarkus:quarkus-reactive-pg-client"
+
+    // Flyway Postgres (JDBC)
+    implementation "io.quarkus:quarkus-flyway"
+    implementation "io.quarkus:quarkus-jdbc-postgresql"
+
     implementation "org.apache.commons:commons-lang3:3.11"
 
     testImplementation "io.quarkus:quarkus-junit5"

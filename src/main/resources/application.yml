@@ -1,9 +1,16 @@
-display:
-  mach: 3
-  unit:
-    name: "mph"
-    factor: 2.23694
-
 quarkus:
   vertx:
     prefer-native-transport: true
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: postgres
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/postgres
+    reactive:
+      url: postgresql://localhost:5432/postgres
+  flyway:
+    migrate-at-start: true
+    baseline-on-migrate: true
+    schemas: phonecatalog
+    locations: db/migration
