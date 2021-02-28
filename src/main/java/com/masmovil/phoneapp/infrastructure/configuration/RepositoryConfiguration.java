@@ -5,6 +5,7 @@ import com.masmovil.phoneapp.infrastructure.repository.PostgresCatalogPhoneRepos
 import com.masmovil.phoneapp.infrastructure.repository.mapper.PostgresCatalogPhoneMapper;
 import io.vertx.mutiny.pgclient.PgPool;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 
@@ -12,7 +13,9 @@ import javax.enterprise.inject.Produces;
 public class RepositoryConfiguration {
 
   @Produces
+  @ApplicationScoped
   public CatalogPhoneRepository phoneRepository(PgPool jdbcPool) {
+
     return new PostgresCatalogPhoneRepository(jdbcPool, new PostgresCatalogPhoneMapper());
   }
 

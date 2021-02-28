@@ -4,6 +4,7 @@ import com.masmovil.phoneapp.application.getphonecatalog.GetPhoneCatalogService;
 import com.masmovil.phoneapp.domain.repository.CatalogPhoneRepository;
 import io.quarkus.arc.DefaultBean;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 
@@ -11,6 +12,7 @@ import javax.enterprise.inject.Produces;
 public class ApplicationServiceConfiguration {
 
   @Produces
+  @ApplicationScoped
   @DefaultBean
   public GetPhoneCatalogService getPhoneCatalogService(final CatalogPhoneRepository catalogPhoneRepository) {
     return new GetPhoneCatalogService(catalogPhoneRepository);

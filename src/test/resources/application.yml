@@ -6,11 +6,12 @@ quarkus:
     username: postgres
     password: postgres
     jdbc:
-      url: jdbc:postgresql://localhost:5432/postgres?currentSchema=PHONECATALOG
+      url: jdbc:postgresql://localhost:5432/postgres
     reactive:
       url: postgresql://localhost:5432/postgres
   flyway:
     migrate-at-start: true
     baseline-on-migrate: true
     schemas: phonecatalog
-    locations: db/migration
+    locations: db/migration_test
+

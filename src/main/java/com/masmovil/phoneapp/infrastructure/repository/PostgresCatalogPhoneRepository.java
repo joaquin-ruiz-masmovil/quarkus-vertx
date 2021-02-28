@@ -31,7 +31,7 @@ public class PostgresCatalogPhoneRepository implements CatalogPhoneRepository {
 
     LOGGER.info("Postgres DB get All Phone Catalog");
 
-    return jdbcPool.preparedQuery("SELECT * FROM PHONES_CATALOGUE")
+    return jdbcPool.preparedQuery("SELECT * FROM PHONECATALOG.PHONES_CATALOGUE")
         .execute()
         .convert().with(UniRxConverters.toSingle().failOnNull())
         .flatMap(rows -> Observable.fromIterable(rows)

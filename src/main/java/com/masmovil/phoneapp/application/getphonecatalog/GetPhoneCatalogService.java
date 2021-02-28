@@ -6,11 +6,10 @@ import io.reactivex.Single;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
+
 public class GetPhoneCatalogService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GetPhoneCatalogService.class);
