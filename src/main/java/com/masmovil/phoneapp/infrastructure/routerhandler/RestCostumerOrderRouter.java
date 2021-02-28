@@ -1,8 +1,10 @@
 package com.masmovil.phoneapp.infrastructure.routerhandler;
 
-import com.masmovil.phoneapp.application.getphonecatalog.GetPhoneCatalogService;
+import com.masmovil.phoneapp.application.createcostumerorder.CostumerOrderRequest;
+import com.masmovil.phoneapp.application.createcostumerorder.CreateCostumerOrderService;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.quarkus.vertx.web.Body;
 import io.quarkus.vertx.web.Route;
 import io.quarkus.vertx.web.RouteBase;
 import io.vertx.core.http.HttpHeaders;
@@ -19,39 +21,35 @@ import static io.netty.handler.codec.http.HttpHeaderValues.TEXT_PLAIN;
 
 @RouteBase(path = "/v1", produces = "application/json")
 @ApplicationScoped
-public class RestPhoneCatalogRouter {
+public class RestCostumerOrderRouter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(RestPhoneCatalogRouter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RestCostumerOrderRouter.class);
 
-  private GetPhoneCatalogService getPhoneCatalogService;
+  private CreateCostumerOrderService createCostumerOrderService;
 
-  public RestPhoneCatalogRouter(GetPhoneCatalogService getPhoneCatalogService) {
-    this.getPhoneCatalogService = getPhoneCatalogService;
+  public RestCostumerOrderRouter(CreateCostumerOrderService createCostumerOrderService) {
+    this.createCostumerOrderService = createCostumerOrderService;
   }
 
-  @Route(methods = HttpMethod.GET, path = "/phones")
-  public void getPhoneCatalog(RoutingContext rc) {
+  @Route(methods = HttpMethod.POST, path = "/order")
+  public void createOrder(RoutingContext rc, @Body CostumerOrderRequest costumerOrderRequest) {
 
     LOGGER.info("Handler {} {}", rc.currentRoute().methods().toString(), rc.currentRoute().getPath());
 
     try {
+      createCostumerOrderService.execute(costumerOrderRequest)
+          .subscribe(
+              result -> {
+                rc.response()
+                    .setChunked(true)
+                    .putHeader(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON)
+                    .setStatusCode(201)
+                    .end(Json.encodePrettily(result));
+              });
 
-      getPhoneCatalogService.execute().subscribe(
-          result -> {
-            LOGGER.info("GET Phone Catalog: " + result.size());
-            rc.response()
-                .setChunked(true)
-                .putHeader(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON)
-                .setStatusCode(HttpResponseStatus.OK.code())
-                .end(Json.encodePrettily(result));
-          },
-          error -> {
-            LOGGER.error("GET Phone Catalog fails: " + error.getMessage());
-            handleError(error, rc.response());
-          }
-      );
     } catch (Exception e) {
-      handleError(e, rc.response());
+      LOGGER.error(e.getMessage(), e);
+      rc.response().setStatusCode(500).end();
     }
 
   }

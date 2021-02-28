@@ -1,5 +1,6 @@
 package com.masmovil.phoneapp.infrastructure.configuration;
 
+import com.masmovil.phoneapp.application.createcostumerorder.CreateCostumerOrderService;
 import com.masmovil.phoneapp.application.getphonecatalog.GetPhoneCatalogService;
 import com.masmovil.phoneapp.domain.repository.CatalogPhoneRepository;
 import io.quarkus.arc.DefaultBean;
@@ -18,4 +19,10 @@ public class ApplicationServiceConfiguration {
     return new GetPhoneCatalogService(catalogPhoneRepository);
   }
 
+  @Produces
+  @ApplicationScoped
+  @DefaultBean
+  public CreateCostumerOrderService createCostumerOrderService(final CatalogPhoneRepository catalogPhoneRepository) {
+    return new CreateCostumerOrderService(catalogPhoneRepository);
+  }
 }
