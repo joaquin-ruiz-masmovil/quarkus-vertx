@@ -1,6 +1,8 @@
 plugins {
     id "java"
     id "io.quarkus"
+    id "jacoco"
+    id "com.avast.gradle.docker-compose" version "0.14.0"
 }
 
 ext {
@@ -54,4 +56,41 @@ compileJava {
 
 compileTestJava {
     options.encoding = "UTF-8"
+}
+
+dockerCompose.isRequiredBy(test)
+
+dockerCompose {
+    useComposeFiles = ['docker-compose.yml'] // like 'docker-compose -f <file>'
+    captureContainersOutput = true // prints output of all containers to Gradle output - very useful for debugging
+    stopContainers = true // doesn't call `docker-compose down` - useful for debugging
+    removeContainers = true
+    removeOrphans = true
+    upAdditionalArgs = ['--force-recreate']
+}
+
+tasks.withType(Test) {
+
+    reports.html.destination = file("${reporting.baseDir}/${name}")
+
+    testLogging {
+        // set options for log level LIFECYCLE
+        events "skipped", "failed", "standardOut"
+        showExceptions true
+        exceptionFormat "short"
+        showCauses true
+        showStackTraces true
+
+        info.events = debug.events
+        info.exceptionFormat = debug.exceptionFormat
+
+        afterSuite { desc, result ->
+            if (!desc.parent) {
+                def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+                def startItem = '|  ', endItem = '  |'
+                def repeatLength = startItem.length() + output.length() + endItem.length()
+                println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
+            }
+        }
+    }
 }
