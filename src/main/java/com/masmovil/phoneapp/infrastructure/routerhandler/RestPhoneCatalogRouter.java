@@ -56,11 +56,6 @@ public class RestPhoneCatalogRouter {
 
   }
 
-  @Route(type = Route.HandlerType.FAILURE)
-  public void errorHandler(RuntimeException e, HttpServerResponse res) {
-    handleError(e, res);
-  }
-
   private void handleError(Throwable error, HttpServerResponse response) {
     response.putHeader(HttpHeaders.CONTENT_TYPE, TEXT_PLAIN)
         .setStatusCode(HttpResponseStatus.INTERNAL_SERVER_ERROR.code())

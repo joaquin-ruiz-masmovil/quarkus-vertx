@@ -15,3 +15,14 @@ quarkus:
     schemas: phonecatalog
     locations: db/migration_test
 
+kafka:
+  bootstrap:
+    servers: localhost:9092
+  messaging:
+    outgoing:
+      costumerorder:
+        topic: test.costumerorders.topic
+        key:
+          serializer: org.apache.kafka.common.serialization.StringSerializer
+        value:
+          serializer: org.apache.kafka.common.serialization.StringSerializer

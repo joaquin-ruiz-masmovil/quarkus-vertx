@@ -1,6 +1,8 @@
 package com.masmovil.phoneapp.application.createcostumerorder;
 
 
+import com.masmovil.phoneapp.domain.event.CostumerOrderCreated;
+import com.masmovil.phoneapp.domain.event.service.DomainEventPublisher;
 import com.masmovil.phoneapp.domain.model.CostumerOrder;
 import com.masmovil.phoneapp.domain.repository.CatalogPhoneRepository;
 import io.reactivex.Single;
@@ -8,9 +10,12 @@ import io.reactivex.Single;
 public class CreateCostumerOrderService {
 
   private CatalogPhoneRepository catalogPhoneRepository;
+  private DomainEventPublisher<CostumerOrder> costumerOrderPublisher;
 
-  public CreateCostumerOrderService(CatalogPhoneRepository catalogPhoneRepository) {
+  public CreateCostumerOrderService(CatalogPhoneRepository catalogPhoneRepository,
+                                    DomainEventPublisher<CostumerOrder> costumerOrderPublisher) {
     this.catalogPhoneRepository = catalogPhoneRepository;
+    this.costumerOrderPublisher = costumerOrderPublisher;
   }
 
   public Single<CostumerOrderResponse> execute(CostumerOrderRequest requestOrder) {
@@ -24,6 +29,8 @@ public class CreateCostumerOrderService {
               .withPhonesNames(costumerOrderRequest.getPhonesNames())
               .withPhoneCatalog(catalogPhoneList)
               .build();
+
+          costumerOrderPublisher.publish(new CostumerOrderCreated(costumerOrder));
 
           return new CostumerOrderResponse(
               costumerOrder.getName(),

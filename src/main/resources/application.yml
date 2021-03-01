@@ -1,4 +1,6 @@
 quarkus:
+  http:
+    port: 8000
   vertx:
     prefer-native-transport: true
   datasource:
@@ -14,3 +16,15 @@ quarkus:
     baseline-on-migrate: true
     schemas: phonecatalog
     locations: db/migration
+
+kafka:
+  bootstrap:
+    servers: localhost:9092
+  messaging:
+    outgoing:
+      costumerorder:
+        topic: test.costumerorders.topic
+        key:
+          serializer: org.apache.kafka.common.serialization.StringSerializer
+        value:
+          serializer: org.apache.kafka.common.serialization.StringSerializer

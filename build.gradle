@@ -6,8 +6,7 @@ plugins {
 }
 
 ext {
-    mockitoVersion = "3.8.0"
-    vertxVersion = "4.0.2"
+    vertxVersion = '4.0.2'
 }
 
 repositories {
@@ -22,7 +21,7 @@ dependencies {
     implementation "io.quarkus:quarkus-config-yaml"
     implementation "io.quarkus:quarkus-arc"
 
-    // RxJava2 Verx - Quarkus Integration
+    // RxJava2 Vertx - Quarkus Integration
     implementation "io.vertx:vertx-rx-java2:$vertxVersion"
     implementation "io.smallrye.reactive:mutiny-rxjava:0.14.0"
 
@@ -32,6 +31,11 @@ dependencies {
     // Flyway Postgres (JDBC)
     implementation "io.quarkus:quarkus-flyway"
     implementation "io.quarkus:quarkus-jdbc-postgresql"
+
+    // Kafka Client
+    implementation "io.vertx:vertx-kafka-client:$vertxVersion"
+    // Kafka Serializers
+    implementation "org.apache.kafka:kafka-clients:2.7.0"
 
     implementation "org.apache.commons:commons-lang3:3.11"
 
@@ -61,7 +65,7 @@ compileTestJava {
 dockerCompose.isRequiredBy(test)
 
 dockerCompose {
-    useComposeFiles = ['docker-compose.yml'] // like 'docker-compose -f <file>'
+    useComposeFiles = ['docker-compose.test.yml'] // like 'docker-compose -f <file>'
     captureContainersOutput = true // prints output of all containers to Gradle output - very useful for debugging
     stopContainers = true // doesn't call `docker-compose down` - useful for debugging
     removeContainers = true

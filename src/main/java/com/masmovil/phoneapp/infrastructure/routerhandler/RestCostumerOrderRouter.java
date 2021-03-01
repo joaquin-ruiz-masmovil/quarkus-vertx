@@ -45,24 +45,22 @@ public class RestCostumerOrderRouter {
                     .putHeader(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON)
                     .setStatusCode(201)
                     .end(Json.encodePrettily(result));
-              });
-
+              },
+              error -> {
+                LOGGER.error("POST create order fails: " + error.getMessage());
+                handleError(error.getMessage(), rc.response());
+              }
+          );
     } catch (Exception e) {
       LOGGER.error(e.getMessage(), e);
-      rc.response().setStatusCode(500).end();
+      handleError(e.getMessage(), rc.response());
     }
-
   }
 
-  @Route(type = Route.HandlerType.FAILURE)
-  public void errorHandler(RuntimeException e, HttpServerResponse res) {
-    handleError(e, res);
-  }
-
-  private void handleError(Throwable error, HttpServerResponse response) {
+  private void handleError(String errorMessage, HttpServerResponse response) {
     response.putHeader(HttpHeaders.CONTENT_TYPE, TEXT_PLAIN)
         .setStatusCode(HttpResponseStatus.INTERNAL_SERVER_ERROR.code())
-        .end(error.getMessage());
+        .end(errorMessage);
   }
 
 }
